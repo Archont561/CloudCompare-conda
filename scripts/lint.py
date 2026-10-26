@@ -82,6 +82,12 @@ def main() -> int:
         fail("release workflow does not target the requested prefix.dev channel")
     if "--generate-attestation" not in release_text:
         fail("publisher should generate a package attestation with trusted publishing")
+    upload_version = re.search(r"(?m)^\s*rattler-build-version:\s*(\S+)\s*$", release_text)
+    if not upload_version or not re.fullmatch(r"v\d+\.\d+\.\d+", upload_version.group(1)):
+        fail(
+            "rattler-build-action interpolates rattler-build-version directly into the GitHub "
+            "release download URL, so it must be a tag with a leading 'v' (e.g. v0.68.0)"
+        )
     if re.search(r"PREFIX_API_KEY|PREFIX_DEV_TOKEN|--api-key|secrets\.", release_text, re.IGNORECASE):
         fail("release workflow must not use stored prefix.dev tokens or secret-based authentication")
 
