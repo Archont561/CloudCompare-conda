@@ -29,7 +29,7 @@ Packages are written to `output/<platform>/`.
 
 ## Releases
 
-Publishing starts when a matching stable GitHub Release is published. GitHub Actions builds, tests, and audits all four platforms, then publishes through prefix.dev Trusted Publishing (OIDC); no publishing token is stored in repository secrets. The daily watcher checks for newer stable upstream releases and opens a deduplicated issue—it does not publish automatically.
+Publishing starts when a matching stable GitHub Release is published. GitHub Actions builds, tests, and audits all four platforms, then the publish job—running in the GitHub Environment named `prefix`—uploads the `cloudcompare` package through prefix.dev Trusted Publishing (OIDC); no publishing token is stored in repository secrets. After that prefix.dev upload succeeds, the same four `.conda` files are attached to the GitHub Release. The daily watcher checks for newer stable upstream releases and opens a deduplicated issue—it does not publish automatically.
 
 ## Licensing
 
