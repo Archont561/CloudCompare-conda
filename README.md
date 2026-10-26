@@ -33,7 +33,7 @@ Publishing starts when a matching stable GitHub Release is published. GitHub Act
 
 ## Verification
 
-Connected-host smoke-test evidence for the published `linux-64` package is recorded in [CloudCompare 2.13.2 linux-64 host smoke test](docs/evidence/cloudcompare-2.13.2-linux-64-smoke-test.md). It covers installation from prefix.dev, CLI round-trip export, and CloudCompare/ccViewer GUI launch under a virtual display; it is not a native-desktop validation for every platform.
+Connected-host smoke-test evidence for the published `linux-64` package is recorded in [CloudCompare 2.13.2 linux-64 host smoke test](docs/evidence/cloudcompare-2.13.2-linux-64-smoke-test.md), including the extracted report, screenshots, logs, test data, and Pixi manifest/lockfile. It covers installation from prefix.dev, CLI round-trip export, and CloudCompare/ccViewer GUI launch under a virtual display; it is not a native-desktop validation for every platform.
 
 ## Licensing
 

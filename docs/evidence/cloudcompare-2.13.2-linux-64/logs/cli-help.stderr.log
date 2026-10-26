@@ -1,0 +1,2 @@
+QSocketNotifier: Can only be used with threads started with QThread
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-user'

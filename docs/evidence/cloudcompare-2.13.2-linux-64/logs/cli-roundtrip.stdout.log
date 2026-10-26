@@ -1,0 +1,30 @@
+[18:16:38] [ccColorScalesManager] Found 0 custom scale(s) in persistent settings
+[18:16:38] [Plugin] Searching: /home/user/cc-host-test/cloudcompare-smoke-test/.pixi/envs/default/lib/cloudcompare/plugins
+[18:16:38] 	Plugin found: Core I/O (libQCORE_IO_PLUGIN.so)
+[18:16:38] 	Plugin found: CSF Filter (libQCSF_PLUGIN.so)
+[18:16:38] 	Plugin found: EDL Shader (libQEDL_GL_PLUGIN.so)
+[18:16:38] 	Plugin found: Hidden Point Removal (libQHPR_PLUGIN.so)
+[18:16:38] 	Plugin found: LAS (I/O Plugin) (libQLAS_IO_PLUGIN.so)
+[18:16:38] 	Plugin found: SSAO Shader (libQSSAO_GL_PLUGIN.so)
+[18:16:38] [Plugin] Searching: /home/user/.local/share/CCCorp/CloudCompare/plugins
+[18:16:38] [Plugin] Searching: /usr/local/share/CCCorp/CloudCompare/plugins
+[18:16:38] [Plugin] Searching: /usr/share/CCCorp/CloudCompare/plugins
+[18:16:38] [Plugin][Core I/O] New file extensions registered:  GEOREF MA OBJ OFF PDMS PTX SBF STL VTK
+[18:16:38] [Plugin][LAS (I/O Plugin)] New file extensions registered: LAS
+[18:16:38] [Global Shift] Max abs. coord = 1e+04 / max abs. diag = 1e+06
+[18:16:38] [AUTO SAVE STATE]
+[18:16:38] Auto-save is disabled
+[18:16:38] [AUTO SAVE STATE] finished in 0.00 s.
+[18:16:38] [LOAD]
+[18:16:38] Opening file: '/home/user/cc-host-test/test-data/test_cube.xyz'
+[18:16:38] [I/O] File '/home/user/cc-host-test/test-data/test_cube.xyz' loaded successfully
+[18:16:38] Found one cloud with 1000 points
+[18:16:38] [LOAD] finished in 0.01 s.
+[18:16:38] [CHANGE CLOUD OUTPUT FORMAT]
+[18:16:38] Output export format (clouds) set to: PLY
+[18:16:38] [CHANGE CLOUD OUTPUT FORMAT] finished in 0.00 s.
+[18:16:38] [SAVE CLOUDS]
+[18:16:38] [SAVING]
+[18:16:38] [I/O] File '/home/user/cc-host-test/test-data//roundtrip_out.ply' saved successfully
+[18:16:38] [SAVE CLOUDS] finished in 0.00 s.
+[18:16:38] Processed finished in 0.01 s.

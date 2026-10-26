@@ -1,0 +1,103 @@
+[18:15:56] [ccColorScalesManager] Found 0 custom scale(s) in persistent settings
+[18:15:56] [Plugin] Searching: /home/user/cc-host-test/cloudcompare-smoke-test/.pixi/envs/default/lib/cloudcompare/plugins
+[18:15:56] 	Plugin found: Core I/O (libQCORE_IO_PLUGIN.so)
+[18:15:56] 	Plugin found: CSF Filter (libQCSF_PLUGIN.so)
+[18:15:56] 	Plugin found: EDL Shader (libQEDL_GL_PLUGIN.so)
+[18:15:56] 	Plugin found: Hidden Point Removal (libQHPR_PLUGIN.so)
+[18:15:56] 	Plugin found: LAS (I/O Plugin) (libQLAS_IO_PLUGIN.so)
+[18:15:56] 	Plugin found: SSAO Shader (libQSSAO_GL_PLUGIN.so)
+[18:15:56] [Plugin] Searching: /home/user/.local/share/CCCorp/CloudCompare/plugins
+[18:15:56] [Plugin] Searching: /usr/local/share/CCCorp/CloudCompare/plugins
+[18:15:56] [Plugin] Searching: /usr/share/CCCorp/CloudCompare/plugins
+[18:15:56] [Plugin][Core I/O] New file extensions registered:  GEOREF MA OBJ OFF PDMS PTX SBF STL VTK
+[18:15:56] [Plugin][LAS (I/O Plugin)] New file extensions registered: LAS
+[18:15:56] [Global Shift] Max abs. coord = 1e+04 / max abs. diag = 1e+06
+[18:15:56] Available commands:
+[18:15:56] -APPLY_TRANS: Apply Transformation
+[18:15:56] -APPROX_DENSITY: Approx Density
+[18:15:56] -AUTO_SAVE: Auto save state
+[18:15:56] -BEST_FIT_PLANE: Compute best fit plane
+[18:15:56] -C2C_DIST: C2C distance
+[18:15:56] -C2M_DIST: C2M distance
+[18:15:56] -CBANDING: Color banding
+[18:15:56] -CLEAR: Clear
+[18:15:56] -CLEAR_CLOUDS: Clear clouds
+[18:15:56] -CLEAR_MESHES: Clear meshes
+[18:15:56] -CLEAR_NORMALS: Clears normals
+[18:15:56] -CLEVELS: Color levels
+[18:15:56] -CLOSEST_POINT_SET: Closest Point Set
+[18:15:56] -COLOR_INTERP: Color interpolation
+[18:15:56] -COMMAND_FILE: Load commands from file
+[18:15:56] -COMPRESS_FWF: Compress FWF
+[18:15:56] -COMPUTE_NORMALS: Compute structured cloud normals
+[18:15:56] -COORD_TO_SF: Coord to SF
+[18:15:56] -CROP: Crop
+[18:15:56] -CROP2D: Crop 2D
+[18:15:56] -CROSS_SECTION: Cross section
+[18:15:56] -CSF: CSF
+[18:15:56] -CURV: Curvature
+[18:15:56] -C_EXPORT_FMT: Change cloud output format
+[18:15:56] -DEBUG: Debug Command Line
+[18:15:56] -DELAUNAY: Delaunay triangulation
+[18:15:56] -DENSITY: Density
+[18:15:56] -DROP_GLOBAL_SHIFT: Drop global shift
+[18:15:56] -EXTRACT_CC: ExtractCCs
+[18:15:56] -EXTRACT_VERTICES: Extract vertices
+[18:15:56] -FEATURE: Feature
+[18:15:56] -FILTER_SF: Filter by SF value
+[18:15:56] -FLIP_TRI: Flip mesh triangles
+[18:15:56] -H_EXPORT_FMT: Change hierarchy output format
+[18:15:56] -ICP: ICP
+[18:15:56] -INVERT_NORMALS: Invert normals
+[18:15:56] -LOG_FILE: Set log file
+[18:15:56] -MATCH_CENTERS: Match B.B. centers
+[18:15:56] -MERGE_CLOUDS: Merge clouds
+[18:15:56] -MERGE_MESHES: Merge meshes
+[18:15:56] -MESH_VOLUME: Compute mesh volume
+[18:15:56] -MOMENT: 1st order moment
+[18:15:56] -M_EXPORT_FMT: Change mesh output format
+[18:15:56] -NOISE: Noise filter
+[18:15:56] -NORMALS_TO_DIP: Convert normals to dip and dip. dir.
+[18:15:56] -NORMALS_TO_HSV: Convert normals to HSV colors
+[18:15:56] -NORMALS_TO_SFS: Convert normals to scalar fields
+[18:15:56] -NO_TIMESTAMP: No timestamp
+[18:15:56] -O: Load
+[18:15:56] -OCTREE_NORMALS: Compute normals with octree
+[18:15:56] -ORIENT_NORMS_MST: Orient normals
+[18:15:56] -PLY_EXPORT_FMT: Change PLY output format
+[18:15:56] -POP_CLOUDS: Pop cloud
+[18:15:56] -POP_MESHES: Pop mesh
+[18:15:56] -RASTERIZE: Rasterize
+[18:15:56] -RDP: Remove duplicate points
+[18:15:56] -REMOVE_ALL_SFS: Remove all SF
+[18:15:56] -REMOVE_NORMALS: Remove normals
+[18:15:56] -REMOVE_RGB: Remove RGB
+[18:15:56] -REMOVE_SCAN_GRIDS: Remove scan grids
+[18:15:56] -REMOVE_SENSORS: Remove sensors
+[18:15:56] -REMOVE_SF: Remove a specific SF
+[18:15:56] -RENAME_ENTITIES: Rename entities
+[18:15:56] -RENAME_SF: Rename SF
+[18:15:56] -RGB_CONVERT_TO_SF: RGB convert to SF
+[18:15:56] -ROUGH: Roughness
+[18:15:56] -SAMPLE_MESH: Sample mesh
+[18:15:56] -SAVE_CLOUDS: Save clouds
+[18:15:56] -SAVE_MESHES: Save meshes
+[18:15:56] -SELECT_ENTITIES: Select entities
+[18:15:56] -SET_ACTIVE_SF: Set active SF
+[18:15:56] -SET_GLOBAL_SHIFT: Set global shift
+[18:15:56] -SF_ADD_CONST: Add constant SF
+[18:15:56] -SF_ADD_ID: Add indexes as SF
+[18:15:56] -SF_ARITHMETIC: SF arithmetic
+[18:15:56] -SF_COLOR_SCALE: SF color scale
+[18:15:56] -SF_CONVERT_TO_RGB: SF convert to RGB
+[18:15:56] -SF_GRAD: SF gradient
+[18:15:56] -SF_INTERP: SF interpolation
+[18:15:56] -SF_OP: SF operation
+[18:15:56] -SF_OP_SF: SF (add, sub, mult, div) SF
+[18:15:56] -SF_TO_COORD: SF to Coord
+[18:15:56] -SOR: S.O.R. filter
+[18:15:56] -SS: Subsample
+[18:15:56] -STAT_TEST: Statistical test
+[18:15:56] -VERBOSITY: Set Verbosity
+[18:15:56] -VOLUME: 2.5D Volume Calculation
+[18:15:56] Processed finished in 0.00 s.
