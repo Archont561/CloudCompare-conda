@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Reject releases not matching the recipe or not on the default branch history."""
+"""Reject releases not matching the recipe or not on the default branch history.
+
+This script deliberately uses only the standard library. It may be run with a
+runner's system Python, which is not guaranteed to have third-party packages
+such as PyYAML installed (macOS runners do not), so the small piece of recipe
+metadata it needs is read without a YAML parser.
+"""
 
 from __future__ import annotations
 
@@ -9,9 +15,25 @@ import subprocess
 import sys
 from pathlib import Path
 
-import yaml
-
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def recipe_version() -> str:
+    """Read context.version from recipe/recipe.yaml without a YAML parser."""
+    in_context = False
+    recipe = (ROOT / "recipe" / "recipe.yaml").read_text(encoding="utf-8")
+    for line in recipe.splitlines():
+        if line == "context:":
+            in_context = True
+            continue
+        if not in_context:
+            continue
+        if line and not line[0].isspace():
+            break
+        match = re.fullmatch(r'\s+version:\s*"?([^"\s]+)"?\s*', line)
+        if match:
+            return match.group(1)
+    raise SystemExit("could not read context.version from recipe/recipe.yaml")
 
 
 def git(*args: str, cwd: Path = ROOT) -> str:
@@ -25,8 +47,7 @@ def main() -> int:
     parser.add_argument("--check-ancestry", action="store_true", help="require tag commit to be on checked-out default branch")
     args = parser.parse_args()
 
-    recipe = yaml.safe_load((ROOT / "recipe" / "recipe.yaml").read_text(encoding="utf-8"))
-    version = str(recipe["context"]["version"])
+    version = recipe_version()
     if not re.fullmatch(r"\d+\.\d+\.\d+", version):
         raise SystemExit(f"recipe version must be a stable x.y.z release, got {version!r}")
     expected_tag = f"v{version}"

@@ -68,7 +68,7 @@ tests:
             - bin/ccViewer
             - lib/cloudcompare/plugins/*
             - share/cloudcompare/license.txt
-            - share/cloudcompare/shaders
+            - share/cloudcompare/shaders/*/*
       - script:
           interpreter: python
           content: |
