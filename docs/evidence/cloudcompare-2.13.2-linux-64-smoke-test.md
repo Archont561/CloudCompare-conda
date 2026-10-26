@@ -1,7 +1,7 @@
 # CloudCompare 2.13.2 linux-64 host smoke test
 
 **Date:** 2026-10-26 (Europe/Warsaw)  
-**Source:** autonomous connected-host smoke test report (`REPORT.md`)  
+**Source:** autonomous connected-host smoke test ([raw `REPORT.md`](cloudcompare-2.13.2-linux-64/REPORT.md))\
 **Package under test:** `cloudcompare` 2.13.2, build `hb0f4dca_0`, installed from `https://prefix.dev/archont561/archont561`  
 **Release:** [CloudCompare 2.13.2](https://github.com/Archont561/CloudCompare-conda/releases/tag/v2.13.2)
 
@@ -30,21 +30,42 @@ The connected host had no native desktop/display session, so GUI evidence was co
 | Errors / blockers | **None for the package.** Only benign/cosmetic host-side notes were recorded: typical conda-Qt stderr warnings (`QSocketNotifier`, `XDG_RUNTIME_DIR`, ICC profile, translations); `-C_EXPORT_FMT XYZ` was rejected as an unhandled format specifier while `PLY` worked; extra host tools (`xvfb`, `x11-apps`, `xdotool`, `imagemagick`) were installed only to provide the virtual display and screenshots; after the window-close message the CloudCompare process lingered and was ended with SIGTERM (exit 143), which the tester did not classify as a crash. |
 | Cleanup status | Xvfb was stopped, both applications were closed, and Pixi's temporary `~/.bashrc` PATH change was reverted. The connected-host test workspace was intentionally retained by the tester for follow-up. |
 
-## Evidence collected on the connected host
+## Evidence archive
 
-The report lists the following evidence files in the retained connected-host workspace. They were not attached to this repository change, so they are recorded here as an inventory rather than as repository links.
+The extracted connected-host evidence is stored in [`cloudcompare-2.13.2-linux-64/`](cloudcompare-2.13.2-linux-64/). The raw report and logs retain the connected host's `/home/user/cc-host-test` paths exactly as captured.
 
 | Evidence file | Content |
 |---|---|
-| `logs/shot1-ascii-dialog.png` | CloudCompare GUI after launch, pre-import state. |
-| `logs/shot2-cloud-loaded.png` | DB Tree, rendered point cloud, and console log lines. |
-| `logs/shot3-rotated-zoomed.png` | CloudCompare after rotate/zoom interaction, with the view visibly changed. |
-| `logs/shot4-ccviewer.png` | ccViewer rendering the PLY cloud. |
-| `logs/cli-help.stdout.log` | Full `CloudCompare -SILENT -HELP` transcript. |
-| `logs/cli-roundtrip.stdout.log` | Full XYZ → PLY CLI round-trip transcript. |
-| `logs/pixi-add.log` / `logs/channel-add.log` | Install output showing no solver/download/link errors. |
-| `test-data/test_cube.xyz` | 1000-point test cloud used for CLI and GUI checks. |
-| `test-data/test_cube.ply` / `test-data/roundtrip_out.ply` | PLY test cloud and CLI round-trip output. |
+| [`REPORT.md`](cloudcompare-2.13.2-linux-64/REPORT.md) | Original autonomous connected-host smoke-test report. |
+| [`logs/shot1-ascii-dialog.png`](cloudcompare-2.13.2-linux-64/logs/shot1-ascii-dialog.png) | CloudCompare GUI after launch, pre-import state. |
+| [`logs/shot2-cloud-loaded.png`](cloudcompare-2.13.2-linux-64/logs/shot2-cloud-loaded.png) | DB Tree, rendered point cloud, and console log lines. |
+| [`logs/shot3-rotated-zoomed.png`](cloudcompare-2.13.2-linux-64/logs/shot3-rotated-zoomed.png) | CloudCompare after rotate/zoom interaction, with the view visibly changed. |
+| [`logs/shot4-ccviewer.png`](cloudcompare-2.13.2-linux-64/logs/shot4-ccviewer.png) | ccViewer rendering the PLY cloud. |
+| [`logs/cli-help.stdout.log`](cloudcompare-2.13.2-linux-64/logs/cli-help.stdout.log) / [`logs/cli-help.stderr.log`](cloudcompare-2.13.2-linux-64/logs/cli-help.stderr.log) | `CloudCompare -SILENT -HELP` stdout/stderr transcripts. |
+| [`logs/cli-roundtrip.stdout.log`](cloudcompare-2.13.2-linux-64/logs/cli-roundtrip.stdout.log) / [`logs/cli-roundtrip.stderr.log`](cloudcompare-2.13.2-linux-64/logs/cli-roundtrip.stderr.log) | XYZ → PLY CLI round-trip stdout/stderr transcripts. |
+| [`logs/pixi-add.log`](cloudcompare-2.13.2-linux-64/logs/pixi-add.log) / [`logs/channel-add.log`](cloudcompare-2.13.2-linux-64/logs/channel-add.log) | Install/channel output recorded by the tester. |
+| [`test-data/test_cube.xyz`](cloudcompare-2.13.2-linux-64/test-data/test_cube.xyz) | 1000-point ASCII test cloud used for CLI and GUI checks. |
+| [`test-data/test_cube.ply`](cloudcompare-2.13.2-linux-64/test-data/test_cube.ply) / [`test-data/roundtrip_out.ply`](cloudcompare-2.13.2-linux-64/test-data/roundtrip_out.ply) | ASCII PLY input for ccViewer and binary PLY output from the CloudCompare CLI round-trip. |
+| [`test-data/make_cube.py`](cloudcompare-2.13.2-linux-64/test-data/make_cube.py) | Script used to generate the 1000-point cube grid. |
+| [`cloudcompare-smoke-test/pixi.toml`](cloudcompare-2.13.2-linux-64/cloudcompare-smoke-test/pixi.toml) / [`cloudcompare-smoke-test/pixi.lock`](cloudcompare-2.13.2-linux-64/cloudcompare-smoke-test/pixi.lock) | Pixi project manifest and lockfile from the connected-host test environment. |
+
+### Screenshots
+
+#### CloudCompare launch / pre-import state
+
+![CloudCompare after launch on the virtual display, before the test cloud is visible](cloudcompare-2.13.2-linux-64/logs/shot1-ascii-dialog.png)
+
+#### Test cloud loaded in CloudCompare
+
+![CloudCompare showing test_cube in the DB Tree and rendering the 1000-point cube grid](cloudcompare-2.13.2-linux-64/logs/shot2-cloud-loaded.png)
+
+#### After rotate/zoom interaction
+
+![CloudCompare after synthetic rotate and zoom interaction, with the cube grid reoriented and enlarged](cloudcompare-2.13.2-linux-64/logs/shot3-rotated-zoomed.png)
+
+#### ccViewer
+
+![ccViewer rendering the PLY test cloud](cloudcompare-2.13.2-linux-64/logs/shot4-ccviewer.png)
 
 ## Scope limits
 
