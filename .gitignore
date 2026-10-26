@@ -1,0 +1,9 @@
+.pixi/
+output/
+.conda-bld/
+.conda-build/
+build/
+__pycache__/
+*.py[cod]
+*.conda
+*.tar.bz2

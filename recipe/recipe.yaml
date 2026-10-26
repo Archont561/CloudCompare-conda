@@ -1,0 +1,153 @@
+schema_version: 1
+
+context:
+  name: cloudcompare
+  version: "2.13.2"
+  upstream_rev: "49dbbb662f296c7780aae717897c85b3cb3764ed"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  git: https://github.com/CloudCompare/CloudCompare.git
+  rev: ${{ upstream_rev }}
+  # Upstream requires a recursive checkout. Rattler-build pins nested submodules
+  # to the gitlink SHAs recorded in this immutable superproject revision.
+  submodules: true
+
+build:
+  number: 0
+  script:
+    file: ../scripts/build.py
+    interpreter: python
+
+requirements:
+  build:
+    - cmake >=3.27,<4
+    - ninja >=1.11,<2
+    - python >=3.11,<3.14
+    - if: unix
+      then:
+        - cxx-compiler >=1.9,<1.10
+  host:
+    - qt-main >=5.15.15,<5.16
+    - eigen >=3.4,<3.5
+    - laszip >=3.4.3,<3.5
+    - if: linux
+      then:
+        - tbb >=2022.2,<2023
+        - libgl-devel >=1.7,<2
+        - libglu >=9.0,<10
+  run:
+    - qt-main >=5.15.15,<5.16
+    - laszip >=3.4.3,<3.5
+    - if: linux
+      then:
+        - tbb >=2022.2,<2023
+        - libgl >=1.7,<2
+        - libglu >=9.0,<10
+    - if: win
+      then:
+        - vc >=14.3,<15
+        - vc14_runtime >=14.42.34433
+        - ucrt >=10.0.20348.0
+
+tests:
+  - package_contents:
+      files:
+        - share/licenses/cloudcompare/CloudCompare-license.txt
+        - share/licenses/cloudcompare/CCCoreLib-LICENSE.txt
+        - share/licenses/cloudcompare/CCCoreLib-LICENSE-MIT.txt
+        - share/licenses/cloudcompare/QCustomPlot-GPL.txt
+  - if: linux
+    then:
+      - package_contents:
+          files:
+            - bin/CloudCompare
+            - bin/ccViewer
+            - lib/cloudcompare/plugins/*
+            - share/cloudcompare/license.txt
+            - share/cloudcompare/shaders
+      - script:
+          interpreter: python
+          content: |
+            from pathlib import Path
+            import subprocess
+            import sys
+
+            prefix = Path(sys.prefix)
+            executables = [prefix / "bin" / "CloudCompare", prefix / "bin" / "ccViewer"]
+            assert all(path.is_file() for path in executables), "installed app executable is missing"
+            shared_objects = sorted((prefix / "lib" / "cloudcompare").rglob("*.so"))
+            assert shared_objects, "no application/plugin shared libraries were installed"
+            for path in executables + shared_objects:
+                result = subprocess.run(["ldd", str(path)], capture_output=True, text=True, check=False)
+                output = result.stdout + result.stderr
+                assert result.returncode == 0 and "not found" not in output, f"unresolved runtime dependencies for {path}: {output}"
+        requirements:
+          run:
+            - python >=3.11,<3.14
+  - if: win
+    then:
+      - package_contents:
+          files:
+            - CloudCompare/CloudCompare.exe
+            - ccViewer/ccViewer.exe
+            - CloudCompare/plugins/*
+            - ccViewer/plugins/*
+      - script:
+          interpreter: python
+          content: |
+            from pathlib import Path
+            import sys
+
+            prefix = Path(sys.prefix)
+            expected = [prefix / "CloudCompare" / "CloudCompare.exe", prefix / "ccViewer" / "ccViewer.exe"]
+            missing = [str(path) for path in expected if not path.is_file()]
+            assert not missing, "missing Windows app executable(s): " + ", ".join(missing)
+        requirements:
+          run:
+            - python >=3.11,<3.14
+  - if: osx
+    then:
+      - package_contents:
+          files:
+            - CloudCompare/CloudCompare.app/Contents/MacOS/CloudCompare
+            - ccViewer/ccViewer.app/Contents/MacOS/ccViewer
+      - script:
+          interpreter: python
+          content: |
+            from pathlib import Path
+            import sys
+
+            prefix = Path(sys.prefix)
+            expected = [
+                prefix / "CloudCompare" / "CloudCompare.app" / "Contents" / "MacOS" / "CloudCompare",
+                prefix / "ccViewer" / "ccViewer.app" / "Contents" / "MacOS" / "ccViewer",
+            ]
+            missing = [str(path) for path in expected if not path.is_file()]
+            assert not missing, "missing macOS app executable(s): " + ", ".join(missing)
+        requirements:
+          run:
+            - python >=3.11,<3.14
+
+about:
+  homepage: https://www.cloudcompare.org/
+  repository: https://github.com/CloudCompare/CloudCompare
+  documentation: https://www.cloudcompare.org/doc/wiki/index.php/Main_Page
+  summary: 3D point cloud and mesh processing software
+  description: >-
+    CloudCompare is a 3D point cloud and triangular mesh processing application.
+    This cross-platform Conda package builds the graphical applications and a
+    selected set of upstream-supported plugins, including LAS/LAZ IO.
+  license: "GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-only AND MIT"
+  license_file:
+    - license.txt
+    - libs/qCC_db/extern/CCCoreLib/LICENSE.txt
+    - libs/qCC_db/extern/CCCoreLib/LICENSE-MIT.txt
+    - qCC/extern/QCustomPlot/GPL.txt
+
+extra:
+  recipe-maintainers:
+    - archont561

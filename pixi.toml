@@ -1,0 +1,20 @@
+[workspace]
+name = "cloudcompare-conda"
+version = "0.1.0"
+description = "Build and publish CloudCompare cross-platform Conda packages with rattler-build"
+authors = ["archont561"]
+channels = ["conda-forge"]
+platforms = ["linux-64", "win-64", "osx-64", "osx-arm64"]
+
+[dependencies]
+# Application build dependencies are centralized in recipe/recipe.yaml.
+rattler-build = "==0.68.0"
+python = ">=3.11,<3.14"
+pyyaml = ">=6.0,<7"
+zstandard = ">=0.23,<1"
+
+[tasks]
+lint = "python scripts/lint.py"
+build = "rattler-build build --recipe recipe/recipe.yaml --channel conda-forge"
+test = "python scripts/test_package.py"
+audit = "python scripts/audit_package.py"

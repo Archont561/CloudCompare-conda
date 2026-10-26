@@ -1,0 +1,109 @@
+name: Build and publish CloudCompare Conda package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudcompare-release-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build, test and audit ${{ matrix.subdir }} package
+    if: github.event.release.prerelease == false && github.event.release.draft == false
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - subdir: linux-64
+            runner: ubuntu-24.04
+          - subdir: win-64
+            runner: windows-2025
+          - subdir: osx-64
+            runner: macos-15-intel
+          - subdir: osx-arm64
+            runner: macos-15
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 240
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the trusted default branch
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up pinned Pixi
+        uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.82.0
+
+      - name: Configure MSVC x64 environment
+        if: matrix.subdir == 'win-64'
+        shell: bash
+        run: python scripts/setup_msvc.py
+
+      - name: Verify release tag and pinned recipe
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: python scripts/release_guard.py --tag "$RELEASE_TAG" --check-ancestry
+
+      - name: Lint manifests and workflow
+        shell: bash
+        run: pixi run lint
+
+      - name: Build package
+        shell: bash
+        run: pixi run build
+
+      - name: Run isolated package tests
+        shell: bash
+        run: pixi run test
+
+      - name: Audit package contents and native binaries
+        shell: bash
+        run: pixi run audit
+
+      - name: Upload built package artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cloudcompare-${{ matrix.subdir }}
+          path: output/${{ matrix.subdir }}/*.conda
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+  publish:
+    name: Publish to prefix.dev using GitHub OIDC
+    needs: build
+    if: github.event.release.prerelease == false && github.event.release.draft == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download all audited package artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: cloudcompare-*
+          path: package
+          merge-multiple: true
+
+      # This job intentionally does not check out or execute this repository's
+      # code. Only the pinned uploader and the built package artifacts are present.
+      - name: Set up rattler-build upload client
+        uses: prefix-dev/rattler-build-action@1ca5f45832f419a46d1326ccc5861d7e14d67c44 # v0.2.39
+        with:
+          setup-only: true
+          rattler-build-version: 0.68.0
+
+      - name: Publish .conda packages with trusted publishing and attestation
+        run: rattler-build upload prefix --channel archont561/archont561 --skip-existing --generate-attestation package/*.conda
