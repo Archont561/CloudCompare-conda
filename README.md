@@ -31,6 +31,10 @@ Packages are written to `output/<platform>/`.
 
 Publishing starts when a matching stable GitHub Release is published. GitHub Actions builds, tests, and audits all four platforms, then the publish job—running in the GitHub Environment named `prefix`—uploads the `cloudcompare` package through prefix.dev Trusted Publishing (OIDC); no publishing token is stored in repository secrets. After that prefix.dev upload succeeds, the same four `.conda` files are attached to the GitHub Release. The daily watcher checks for newer stable upstream releases and opens a deduplicated issue—it does not publish automatically.
 
+## Verification
+
+Connected-host smoke-test evidence for the published `linux-64` package is recorded in [CloudCompare 2.13.2 linux-64 host smoke test](docs/evidence/cloudcompare-2.13.2-linux-64-smoke-test.md). It covers installation from prefix.dev, CLI round-trip export, and CloudCompare/ccViewer GUI launch under a virtual display; it is not a native-desktop validation for every platform.
+
 ## Licensing
 
 Packages include CloudCompare, CCCoreLib, and QCustomPlot license notices under `share/licenses/cloudcompare/`. The root [MIT license](LICENSE) covers only this packaging repository, not CloudCompare or its dependencies.
