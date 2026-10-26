@@ -85,6 +85,7 @@ jobs:
     needs: build
     if: github.event.release.prerelease == false && github.event.release.draft == false
     runs-on: ubuntu-24.04
+    environment: prefix
     timeout-minutes: 30
     permissions:
       contents: read

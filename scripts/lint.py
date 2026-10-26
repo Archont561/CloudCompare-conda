@@ -71,6 +71,8 @@ def main() -> int:
         fail("build job must not have OIDC permission")
     if jobs["publish"].get("permissions", {}).get("id-token") != "write":
         fail("publish job must have narrowly-scoped id-token: write permission")
+    if jobs["publish"].get("environment") != "prefix":
+        fail("publish job must run in the 'prefix' GitHub Environment so its OIDC token carries the environment claim trusted by prefix.dev")
     if not jobs["publish"].get("needs"):
         fail("publish job must depend on the build job")
     matrix_platforms = sorted(item.get("subdir", "") for item in build.get("strategy", {}).get("matrix", {}).get("include", []))
