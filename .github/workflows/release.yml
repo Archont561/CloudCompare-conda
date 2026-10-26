@@ -88,7 +88,7 @@ jobs:
     environment: prefix
     timeout-minutes: 30
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
       - name: Download all audited package artifacts
@@ -112,3 +112,21 @@ jobs:
 
       - name: Publish .conda packages with trusted publishing and attestation
         run: rattler-build upload prefix --channel archont561/archont561 --skip-existing --generate-attestation package/*.conda
+
+      # Runs only if the prefix.dev upload above succeeded (the default
+      # success() condition), so the GitHub Release never advertises packages
+      # that did not reach the Pixi/prefix.dev channel.
+      - name: Attach published .conda packages to GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          shopt -s nullglob
+          packages=(package/*.conda)
+          if [ "${#packages[@]}" -ne 4 ]; then
+            echo "Expected 4 published .conda packages, found ${#packages[@]}" >&2
+            exit 1
+          fi
+          gh release upload "$RELEASE_TAG" "${packages[@]}" --repo "$GH_REPO" --clobber

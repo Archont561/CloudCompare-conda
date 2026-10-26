@@ -69,10 +69,26 @@ def main() -> int:
     build = jobs["build"]
     if "id-token" in build.get("permissions", {}):
         fail("build job must not have OIDC permission")
-    if jobs["publish"].get("permissions", {}).get("id-token") != "write":
-        fail("publish job must have narrowly-scoped id-token: write permission")
+    publish_permissions = jobs["publish"].get("permissions", {})
+    if publish_permissions != {"contents": "write", "id-token": "write"}:
+        fail("publish job permissions must be limited to contents: write for GitHub Release assets and id-token: write for prefix.dev OIDC")
     if jobs["publish"].get("environment") != "prefix":
         fail("publish job must run in the 'prefix' GitHub Environment so its OIDC token carries the environment claim trusted by prefix.dev")
+    publish_steps = jobs["publish"].get("steps", [])
+    publish_step_names = [step.get("name", "") for step in publish_steps]
+    prefix_publish_step = "Publish .conda packages with trusted publishing and attestation"
+    release_assets_step = "Attach published .conda packages to GitHub Release"
+    if prefix_publish_step not in publish_step_names or release_assets_step not in publish_step_names:
+        fail("publish job must publish to prefix.dev and then attach the same packages to the GitHub Release")
+    if publish_step_names.index(release_assets_step) <= publish_step_names.index(prefix_publish_step):
+        fail("GitHub Release assets must be attached only after the prefix.dev publish step")
+    release_assets = next(step for step in publish_steps if step.get("name") == release_assets_step)
+    release_assets_env = release_assets.get("env", {})
+    release_assets_run = release_assets.get("run", "")
+    if release_assets_env.get("GH_TOKEN") != "${{ github.token }}" or release_assets_env.get("RELEASE_TAG") != "${{ github.event.release.tag_name }}":
+        fail("GitHub Release asset upload must use the ephemeral workflow token and the triggering release tag")
+    if "gh release upload" not in release_assets_run or "package/*.conda" not in release_assets_run or "--clobber" not in release_assets_run:
+        fail("GitHub Release asset upload must attach the published package/*.conda files idempotently")
     if not jobs["publish"].get("needs"):
         fail("publish job must depend on the build job")
     matrix_platforms = sorted(item.get("subdir", "") for item in build.get("strategy", {}).get("matrix", {}).get("include", []))
