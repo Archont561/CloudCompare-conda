@@ -103,7 +103,11 @@ jobs:
         uses: prefix-dev/rattler-build-action@1ca5f45832f419a46d1326ccc5861d7e14d67c44 # v0.2.39
         with:
           setup-only: true
-          rattler-build-version: 0.68.0
+          # Must keep the leading "v": the action interpolates this value
+          # directly into the GitHub release download URL, and upstream
+          # tags its releases "vX.Y.Z". Without it the download 404s and
+          # curl (no --fail) saves "Not Found" as the executable.
+          rattler-build-version: v0.68.0
 
       - name: Publish .conda packages with trusted publishing and attestation
         run: rattler-build upload prefix --channel archont561/archont561 --skip-existing --generate-attestation package/*.conda
